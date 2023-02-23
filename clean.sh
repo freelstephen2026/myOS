@@ -1,0 +1,2 @@
+rm build/*
+rm obj/*

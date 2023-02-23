@@ -1,0 +1,36 @@
+.code16
+.text
+	.globl _start
+_start:
+	movw $0xa, %di
+	call bios__putchar
+
+	hlt
+.halt:
+	jmp .halt
+	ret
+
+bios__putchar:
+    #move %di's lower 8 bits into %al
+	movw %di, %ax
+	andb $0xff, %al
+	# 0x0E in %ah tells BIOS to print the character
+	movb $0x0e, %ah
+	int $0x10
+	movw %di, %ax
+	ret
+
+
+_bios__putchar:
+	#move %di's lower 8 bits into %al
+	movw %di, %ax
+	andb $0xff, %al
+	# 0x0E in %ah tells BIOS to print the character
+	movb $0x0e, %ah
+	int $0x10
+	movw %di, %ax
+	ret
+
+. = _start + 510
+.byte 0x55
+.byte 0xaa

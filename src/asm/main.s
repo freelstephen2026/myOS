@@ -10,10 +10,7 @@ _start:
 	movw $0xa, %di
 	call bios_putchar
 
-	movw $'h', %di
-	call bios_putchar
-
-	mov $str2, %di
+	mov $str, %di
 	call bios_print
 
 	hlt
@@ -38,7 +35,7 @@ bios_print:
 	
 .next_char:
 	#current char is in %cx
-	movw (%bx), %cx
+	movb (%bx), %cl
 	cmp $0, %cx    # Check if %bx is 0 (null)
 	je .finish_bios_print
 	
@@ -50,8 +47,6 @@ bios_print:
 	jmp .next_char
 
 .finish_bios_print:
-	movw $'X', %di
-	call bios_putchar
 	movw %ax, %ax
 	ret
 

@@ -2,28 +2,27 @@
 .text
 	.globl _start
 _start:
+	#set up segment registers
+	xor %ax, %ax
+	mov %ax, %ds
+	mov %ax, %es
+	movw %ax, %ss
 	movw $0x7c00, %sp
-
-	movw $'x', %di
-	call bios_putchar
-
-	movw $0xa, %di
-	call bios_putchar
-
-	mov $str, %di
+	mov $message__reg_setup_done, %di
 	call bios_print
 
+	#find the port for the sata register
+
+	#keeps everything running
 	hlt
 .halt:
 	jmp .halt
 	ret
 
-str:
-	.string "hi"
+message__reg_setup_done:
+	.string "myOS -- bootloader\n------------------\nsegment registers and stack pointer are set up\n"
 	.byte 0
 
-str2:
-	.byte 'h','i',0x0
 
 bios_print:
 	#pointer to current char goes in %bx
@@ -72,3 +71,5 @@ bios_putchar:
 .bios_putchar_return:
 	movw %di, %ax
 	ret
+
+get_sata_port:
